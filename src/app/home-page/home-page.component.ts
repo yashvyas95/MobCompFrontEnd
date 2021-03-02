@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 //import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -11,15 +11,19 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { RescueTeamDialogComponent} from '../rescue-team-dialog/rescue-team-dialog.component';
 import { RescueTeamInfoDialogComponent} from '../rescue-team-info-dialog/rescue-team-info-dialog.component';
 import { EmployesInfoDialogComponent } from "../employes-info-dialog/employes-info-dialog.component";
+import { AllMessagesDialogComponent} from '../all-messages-dialog/all-messages-dialog.component';
 import * as Stomp from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
+import {MatPaginator} from '@angular/material/paginator';
+import { ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit , AfterViewInit {
   rescueTeamId=0;
   password = 'user';
   user:any;
@@ -30,9 +34,13 @@ export class HomePageComponent implements OnInit {
   requestDialogOpen=false;
   rescueInfoDialogOpen=false;
   employeeInfoDialogOpen=false;
+  active_request:any
   ws: any;
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns=['sender','content'];
+  displayedColumnsForRequest=['requestId','name','location','resTeamObj','nature','status','action'];
   constructor(private router : Router,private localStorage: LocalStorageService, private http: HttpClient,public dialog: MatDialog) { 
     console.log(this.localStorage.retrieve('username'));
     this.connect();
@@ -44,7 +52,8 @@ export class HomePageComponent implements OnInit {
         if(this.localStorage.retrieve('username')==null){this.router.navigate(['/']);}
         const params = new HttpParams().append('username',this.localStorage.retrieve('username')); 
         this.http.get('http://localhost:8080/api/auth/userByUsername',{params:params}).subscribe(
-          (response)=>{
+          (response)=>
+          {
             console.log(response),
             this.user = response,
             console.log(this.user.rescueTeamId);
@@ -54,9 +63,13 @@ export class HomePageComponent implements OnInit {
             this.rescueTeam=[response],
             console.log(this.rescueTeam);
             this.http.get('http://localhost:8080/api/rescueTeam/getRequestByRescueTeamId/',{params:params2}).subscribe(
-                (response)=>{this.requestAssignedToUser=response;console.log(response)},
+                (response)=>{
+                  this.requestAssignedToUser=response;
+                  console.log(response)
+                },
                 (error)=>console.log(error)
             );
+      
           },
           (error)=>console.log(error)
         );
@@ -68,11 +81,21 @@ export class HomePageComponent implements OnInit {
           (response)=>this.AllUsers=response,
           (error)=>console.log(error)
         );
-
-        this.connect();
+        const params2 = new HttpParams().append('id',this.rescueTeamId.toString()); 
+        this.http.get('http://localhost:8080/api/request/getUserActiveRequest',{params:params2}).subscribe(
+          (response)=>
+          {this.active_request=response},
+          (error)=>console.log(error)
+        );
     
+        this.connect();
   }
   
+  ngAfterViewInit() {
+    
+    this.requestAssignedToUser.paginator = this.paginator;
+    this.requestAssignedToUser = new MatTableDataSource<any>( this.requestAssignedToUser);
+  }
   openRescueDialog(): void {
 
     const dialogConfig = new MatDialogConfig();
@@ -109,6 +132,19 @@ export class HomePageComponent implements OnInit {
     else{this.dialog.closeAll();this.employeeInfoDialogOpen=false;} 
   }
 
+  openallMessageDialog():void{
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = this.AllUsers;
+    dialogConfig.autoFocus = true;
+    dialogConfig.position={top:"100px",left:""};
+    if(!this.employeeInfoDialogOpen){this.dialog.open(AllMessagesDialogComponent,dialogConfig);this.employeeInfoDialogOpen=true;}
+    else{this.dialog.closeAll();this.employeeInfoDialogOpen=false;} 
+  }
+
+
+
   openChatLobby():void{
         this.router.navigate(['chatLobby']);
   }
@@ -121,7 +157,6 @@ export class HomePageComponent implements OnInit {
         var MessageReceived=JSON.parse(message.body);
         this.newMessages.push(MessageReceived);
         console.log("ALL MESSAGES"+MessageReceived.content);
-        this.
       });
       
     });

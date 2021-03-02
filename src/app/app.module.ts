@@ -9,7 +9,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {MatGridListModule} from '@angular/material/grid-list';
-import {MatTableModule} from '@angular/material/table';
+//import {MatTableModule} from '@angular/material/table';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -48,6 +48,9 @@ import { MessageToUserDialogComponent } from './message-to-user-dialog/message-t
 import { DepartmentsComponent } from './departments/departments.component';
 import { RequestLandingComponent } from './request-landing/request-landing.component';
 import { RequestLoginComponent } from './request-login/request-login.component';
+import { AllMessagesDialogComponent } from './all-messages-dialog/all-messages-dialog.component';
+import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,7 +76,8 @@ import { RequestLoginComponent } from './request-login/request-login.component';
     MessageToUserDialogComponent,
     DepartmentsComponent,
     RequestLandingComponent,
-    RequestLoginComponent
+    RequestLoginComponent,
+    AllMessagesDialogComponent
   ],
   entryComponents: [ RescueTeamDialogComponent ,RescueTeamInfoAdminDialogComponent,EmployesInfoDialogComponent],
   imports: [
@@ -96,7 +100,9 @@ import { RequestLoginComponent } from './request-login/request-login.component';
     MatSelectModule,
     MatIconModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule 
   ],
   providers: [
     {

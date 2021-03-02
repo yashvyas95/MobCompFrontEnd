@@ -33,8 +33,8 @@ export class RequestComponent implements OnInit {
     location:new FormControl(),
   })
   message="THIS IS MESSAGE";
-  username='user';
-  password='user';
+ // username='user';
+ // password='user';
   invalidLogin = false;
   chatService: any;
 

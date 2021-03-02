@@ -1,2 +1,41 @@
-<p>create-rescue-team-dialog works!</p>
-<button class="btnCreateSubreddit" (click)="close()">Close</button>
+
+ 
+ <span class="col-md-6 offset-md-10">              
+    <button type="button" (click)="close()"class="sign-up">
+        close
+     </button>
+</span>
+<div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="text-align: center">
+                    <h4>Register Rescue Team</h4>
+                </div>
+                <div class="card-body">
+                    <form group="rescueTeam-form" [formGroup]="rescueTeamForm" (ngSubmit)="createRescueTeam()">
+                        <div class="form-group row">
+                            <mat-label>Nature of Assistance Needed</mat-label>    
+                            <section class="example-section">
+                        <mat-checkbox formControlName="fire" class="example-margin" [(ngModel)]="fire">Fire</mat-checkbox>
+                        &nbsp;&nbsp;<mat-checkbox formControlName="medical" class="example-margin" [(ngModel)]="medical">Medical</mat-checkbox>
+                        &nbsp;&nbsp;<mat-checkbox formControlName="crime" class="example-margin" [(ngModel)]="crime">Crime</mat-checkbox>  
+                            </section>
+            
+                       
+                        </div>
+                        <div class="form-group row">
+                            <label for="email_address" class="col-md-6 col-form-label text-md-right">Employees</label>
+                            <div class="col-md-6">
+                                <select [(ngModel)]="rescueTeam.typeOfTeam"  [ngModelOptions]="{standalone: true}" required>
+                                    <option *ngFor="let c of countries" [ngValue]="c">{{c}}</option>
+                                    </select>
+                            </div>
+                        </div>
+                        <span class="col-md-6 offset-md-4">
+                            
+                            <button type="submit" class="sign-up">
+                                Create
+                            </button>
+                        </span>
+                    </form>
+                </div>
+            </div>
