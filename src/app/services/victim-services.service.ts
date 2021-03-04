@@ -24,8 +24,11 @@ export class VictimServicesService {
     return this.httpClient.get('http://localhost:8080/api/request/getById/',{params:params});
   }
   addRequest(requestForSending: RequestForSending):Observable<Request>{
+    console.log("REQUEST SENDING"+requestForSending)   
     var req = this.httpClient.post<Request>('http://localhost:8080/api/request/addRequest',
     requestForSending);
+
+    console.log("VICTIM-SERVIE"+JSON.stringify(req));
     this.localStorage.store('request',req);
     return req;
   }

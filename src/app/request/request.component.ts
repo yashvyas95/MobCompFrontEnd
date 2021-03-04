@@ -47,22 +47,39 @@ export class RequestComponent implements OnInit {
   }
 
   onSubmit(requestData:any){
-    var counter = 0;
-    if(requestData.fire){
-      counter++;
+    let nature:any;
+    if(requestData.crime){
+      if(requestData.fire){
+        if(requestData.medical){
+          nature=6;
+          }
+          else{
+            nature=3;
+          }
+      }
+      else if(requestData.medical){
+        nature=5;
+      }
+      else{
+        nature=0;
+      }
+    }
+    else if(requestData.fire){
+        if(requestData.medical){
+            nature=4;
+        } 
+        else{
+          nature=1;
+        }
     }
     else if(requestData.medical){
-      counter++;
-    }
-    else if(requestData.crime){
-      counter++;
-    }
-    else{
-      counter=-1;
+        nature=2;
     }
     console.log(requestData.name);
-    console.log("Name Holder");
-    var rSending = new RequestForSending(requestData.name,requestData.people,"Test",requestData.location,0,"ON");
+    console.log("nature"+requestData.nature);
+    console.log("NATURE CALCULATED"+nature);
+    var rSending = new RequestForSending(requestData.name,requestData.people,nature,requestData.location,0,true);
+    //console.log("NATURE CALCULATED2"+JSON.stringify(rSending));
     this.vicService.addRequest(rSending).subscribe(
       (data:any)=>{
         console.log(data);
@@ -84,21 +101,6 @@ export class RequestComponent implements OnInit {
      console.log(response.id);
   }
 
- 
-/*
-onSubmit(userData:any){
-  console.log("IN onSubmit method");
-  this.http.get('http://localhost:8080/findByEmail/{email}', userData).subscribe(
-  (response) => this.checkEmail(response,userData),
-  (error) => console.log(error))
-}
-
-checkEmail(response:any,userData:any){
-    if(response.email == userData.email && response.password==userData.password){
-        this.reDirect();  
-    }
-}
-*/
 
 showRequestForm():void{
      // this.loginService.authenticate("user","user");

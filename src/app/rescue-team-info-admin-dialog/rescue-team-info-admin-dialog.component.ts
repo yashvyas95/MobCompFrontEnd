@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { AssignRescueTeamDialogAdminComponent } from '../assign-rescue-team-dialog-admin/assign-rescue-team-dialog-admin.component';
+import { RequestService } from '../services/request.service';
 
 @Component({
   selector: 'app-rescue-team-info-admin-dialog',
@@ -9,11 +11,13 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class RescueTeamInfoAdminDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['Id','request_id' ,'location', 'Emp1', 'Emp2','Emp3','status','action','action2'];
+  displayedColumns: string[] = ['Id','request_id' ,'location', 'Members','nature','status','action','action2'];
   dataSource = new MatTableDataSource();
 
-  constructor(private dialog : MatDialog,@Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(private requestService:RequestService,private dialog : MatDialog,@Inject(MAT_DIALOG_DATA) public data: any) { }
   RequestData:any
+
+  activeRequest:any;
 
   ngOnInit(): void {  
     this.RequestData=this.data;
@@ -21,10 +25,29 @@ export class RescueTeamInfoAdminDialogComponent implements OnInit {
     console.log(this.data),
     console.log(this.RequestData),
     this.dataSource.data=this.RequestData;
+    this.activeRequest=this.requestService.getAllActiveRequest().subscribe(
+      (response)=>{
+        this.activeRequest=response;
+        console.log(response);
+      }
+      
+    );
   }
 
   close(){
     this.dialog.closeAll();
+  }
+  
+  openAssignDialog(rescueTeamId:any){
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+
+      dialogConfig.data = rescueTeamId;
+      dialogConfig.autoFocus = true;
+      console.log("HERE"+JSON.stringify(this.activeRequest));
+      this.dialog.open(AssignRescueTeamDialogAdminComponent,dialogConfig);
+      
   }
   
 }

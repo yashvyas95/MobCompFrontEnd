@@ -3,9 +3,9 @@ export class RequestForSending
     constructor(
         public name: string,
         public numberOfPeople : number,
-        public natureOfAssistance: string,
+        public nature: string,
         public location: string,
         public assignedToTeamId: number,
-        public boolean: string 
+        public status: boolean 
     ){}
 }

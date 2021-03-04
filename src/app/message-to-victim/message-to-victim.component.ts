@@ -70,8 +70,12 @@ export class MessageToVictimComponent implements OnInit {
     console.log("MessageFromADMIN"+this.messageVictimForm.get('message')!.value);
     console.log("INSIDE-MESSAGE-DIALOG"+this.data);
 
+    let channel = "/app/chat/"+this.RequestElement.requestId+"/send";
+    let date = new Date();
+    
 
-    let messageToSend = new chatMessage(Messagetype.CHAT,this.messageVictimForm.get('message')!.value,"test2");
+    //let messageToSend = new chatMessage(Messagetype.CHAT,this.messageVictimForm.get('message')!.value,this.user);
+    let messageToSend = new ChatMessageDto(channel,date.toString(),this.user,this.messageVictimForm.get('message')!.value,this.RequestElement.requestId);
     //let messageToSend = new chatMessage(Messagetype.CHAT,messageContent,"request");
    
   console.log(messageToSend);

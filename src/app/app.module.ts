@@ -51,6 +51,7 @@ import { RequestLoginComponent } from './request-login/request-login.component';
 import { AllMessagesDialogComponent } from './all-messages-dialog/all-messages-dialog.component';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AssignRescueTeamDialogAdminComponent } from './assign-rescue-team-dialog-admin/assign-rescue-team-dialog-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,7 +78,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DepartmentsComponent,
     RequestLandingComponent,
     RequestLoginComponent,
-    AllMessagesDialogComponent
+    AllMessagesDialogComponent,
+    AssignRescueTeamDialogAdminComponent
   ],
   entryComponents: [ RescueTeamDialogComponent ,RescueTeamInfoAdminDialogComponent,EmployesInfoDialogComponent],
   imports: [

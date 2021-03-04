@@ -66,6 +66,7 @@ export class AdminComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.position={top:"100px",left:""};
+    dialogConfig.width="200%";
     if(!this.requestDialogOpen){this.dialog.open(RescueTeamDialogComponent,dialogConfig);this.requestDialogOpen=true;}
     else{this.dialog.closeAll();this.requestDialogOpen=false;} 
 }
@@ -99,6 +100,7 @@ export class AdminComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.data = this.AllUsers;
     if(!this.employeeInfoDialogOpen){this.dialog.open(CreateRescueTeamDialogComponent,dialogConfig);this.employeeInfoDialogOpen=true;}
     else{this.dialog.closeAll();this.employeeInfoDialogOpen=false;}
   }

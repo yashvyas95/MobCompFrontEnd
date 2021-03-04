@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { VictimServicesService } from '../services/victim-services.service';
 import { RescueTeamService } from '../services/rescue-team.service';
@@ -12,6 +12,8 @@ import { ChatMessageDto } from '../model/ChatMessageDto';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 import { chatMessage , Messagetype} from '../model/ChatMessage';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { time } from 'console';
 
 @Component({
   selector: 'app-chat-lobby',
@@ -28,12 +30,9 @@ export class ChatLobbyComponent implements OnInit {
   x:any;
   greetings: string[] = [];
   disabled = true;
-  messages:any[]=[];
+  messages:any;
   private stompClient:any;
-  emp1:any;
-  emp2:any;
-  emp3:any;
-  channelList:String[];
+  channelList!:String[];
   user:any;
   //greetings: string[] = [];
   showConversation: boolean = false;
@@ -44,13 +43,11 @@ export class ChatLobbyComponent implements OnInit {
   chatform:any;
   message:any;
   messageInput:any;
-  constructor(private localStorage: LocalStorageService,private vicServices : VictimServicesService,private reqServices : RescueTeamService,private webSocketService : WebSocketService) {
+  constructor(private dialog:MatDialog,private localStorage: LocalStorageService,private vicServices : VictimServicesService,private reqServices : RescueTeamService,private webSocketService : WebSocketService,@Inject(MAT_DIALOG_DATA) public data: any) {
     this.request = this.localStorage.retrieve('request');
     this.user = this.localStorage.retrieve('username');
     if(this.user!=null){
       console.log("INSIDE");
-
-      this.channelList=["1","2","3"];
     }
     else{
       console.log(this.request);
@@ -61,17 +58,14 @@ export class ChatLobbyComponent implements OnInit {
         (response)=>{
           console.log(response),
           this.rescueTeam=response,
-          this.emp1 = this.rescueTeam.empId;
-          this.emp2 = this.rescueTeam.emp2Id;
-          this.emp3 = this.rescueTeam.emp3Id;
-          this.channelList=[this.emp1,this.emp2,this.emp3];
+          this.channelList=this.rescueTeam.members;
         },
         (error)=>console.log(error)
       );
     }, error => {
       console.log(error)
     });
-    this.channelList=[this.emp1,this.emp2,this.emp3];
+  //  this.channelList=[this.emp1,this.emp2,this.emp3];
     }
     this.chatform = new FormGroup({
       messageInput: new FormControl(''),
@@ -82,8 +76,9 @@ export class ChatLobbyComponent implements OnInit {
 
   ngOnInit(): void {
     //this.request = this.localStorage.retrieve('request');this.request = this.localStorage.retrieve('request');
-
-
+    this.messages=this.data;
+    console.log(this.messages);
+    this.connect();
   }
 
   connect(){
@@ -122,7 +117,6 @@ export class ChatLobbyComponent implements OnInit {
           var x = console.log(JSON.parse(message.body));
           console.log("----------............asdasd."+x);
         });
-
         this.disabled = true;
       }, function(error: string) {
         alert("STOMP error " + error);
@@ -141,10 +135,13 @@ export class ChatLobbyComponent implements OnInit {
     let timestamp =  new Date();
     let messageContent = this.chatform.get('messageInput')!.value;
     console.log("Message INPUT"+messageContent)
-    let messageToSend = new chatMessage(Messagetype.CHAT,messageContent,"request");
+    //let messageToSend = new chatMessage(Messagetype.CHAT,messageContent,"request");
+    //chat/{rescueTeamId}/send
+    let channel = "/app/chat/"+this.rescueTeam.rescueTeamId+"/sendToRescueTeam"
+    let messageToSend = new ChatMessageDto(channel,Date(),this.request.requestId.toString(),messageContent,this.rescueTeam.rescueTeamId);
     console.log(messageToSend);
-    this.ws.send("/app/chat/1/sendMessage", {}, JSON.stringify(messageToSend));
-    this.ws.send("/app/chat", {},messageContent);
+    this.ws.send(channel, {},JSON.stringify(messageToSend));
+    //this.ws.send("/app/chat", {},messageContent);
 }
 
 
@@ -154,6 +151,11 @@ export class ChatLobbyComponent implements OnInit {
       this.webSocketService.sendMessage("Message");
       console.log();
   }
+
+  close(){
+    this.dialog.closeAll();
+  }
+
 /*
 title = 'angular-chat';
   channel: ChannelData;

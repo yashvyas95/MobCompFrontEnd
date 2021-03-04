@@ -1,10 +1,9 @@
 export class RescueTeam{
     constructor(
-        public name: string,
-        public members : number,
+        public members : number[],
         public requestIdAssigned: number,
         public location: string,
-        public typeOfTeam: string,
+        public nature: string,
         public status: string 
     ){}
 }

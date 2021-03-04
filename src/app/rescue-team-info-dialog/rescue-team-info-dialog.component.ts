@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class RescueTeamInfoDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['Id','request_id' ,'location', 'Emp1', 'Emp2','Emp3','status','action'];
+  displayedColumns: string[] = ['Id','request_id' ,'location', 'members','status','action'];
   dataSource = new MatTableDataSource();
 
   constructor(private dialog : MatDialog,@Inject(MAT_DIALOG_DATA) public data: any) { }

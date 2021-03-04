@@ -40,7 +40,7 @@ export class HomePageComponent implements OnInit , AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns=['sender','content'];
-  displayedColumnsForRequest=['requestId','name','location','resTeamObj','nature','status','action'];
+  displayedColumnsForRequest=['requestId','name','location','resTeamObj','nature','status','action','action2'];
   constructor(private router : Router,private localStorage: LocalStorageService, private http: HttpClient,public dialog: MatDialog) { 
     console.log(this.localStorage.retrieve('username'));
     this.connect();
@@ -48,6 +48,7 @@ export class HomePageComponent implements OnInit , AfterViewInit {
   }
   
   ngOnInit(): void {
+    
         console.log(this.localStorage.retrieve('username'));
         if(this.localStorage.retrieve('username')==null){this.router.navigate(['/']);}
         const params = new HttpParams().append('username',this.localStorage.retrieve('username')); 
@@ -62,6 +63,7 @@ export class HomePageComponent implements OnInit , AfterViewInit {
           (response)=>{
             this.rescueTeam=[response],
             console.log(this.rescueTeam);
+            console.log(response);
             this.http.get('http://localhost:8080/api/rescueTeam/getRequestByRescueTeamId/',{params:params2}).subscribe(
                 (response)=>{
                   this.requestAssignedToUser=response;
@@ -84,7 +86,11 @@ export class HomePageComponent implements OnInit , AfterViewInit {
         const params2 = new HttpParams().append('id',this.rescueTeamId.toString()); 
         this.http.get('http://localhost:8080/api/request/getUserActiveRequest',{params:params2}).subscribe(
           (response)=>
-          {this.active_request=response},
+          {
+            this.active_request=response;
+            console.log(response);
+
+          },
           (error)=>console.log(error)
         );
     
@@ -102,8 +108,8 @@ export class HomePageComponent implements OnInit , AfterViewInit {
     dialogConfig.data=this.requestAssignedToUser;
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-   // dialogConfig.height="500px";
-    dialogConfig.width="40%";
+    dialogConfig.height="50%";
+    dialogConfig.width="60%";
     dialogConfig.position={top:"100px",left:""}
     if(!this.requestDialogOpen){this.dialog.open(RescueTeamDialogComponent,dialogConfig);this.requestDialogOpen=true;}
     else{this.dialog.closeAll();this.requestDialogOpen=false;} 
