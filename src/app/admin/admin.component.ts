@@ -10,6 +10,9 @@ import { RescueTeamDialogComponent } from '../rescue-team-dialog/rescue-team-dia
 import { RescueTeamInfoAdminDialogComponent} from '../rescue-team-info-admin-dialog/rescue-team-info-admin-dialog.component';
 import { AuthService } from '../services/auth.service';
 import { CreateRescueTeamDialogComponent } from '../create-rescue-team-dialog/create-rescue-team-dialog.component';
+import { ChatLobbyComponent } from '../chat-lobby/chat-lobby.component';
+import { DepartmentsComponent } from '../departments/departments.component';
+import { CreateDepartmentAdminComponent} from '../create-department-admin/create-department-admin.component';
 
 @Component({
   selector: 'app-admin',
@@ -92,8 +95,13 @@ export class AdminComponent implements OnInit {
   }
 
   openChatLobby(){
-    this.router.navigate(['chatLobby']);
-    
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data;
+    dialogConfig.width="200%";
+    dialogConfig.position={top:"100px",left:""};
+    this.dialog.open(ChatLobbyComponent,dialogConfig);
   }
 
   createRescueTeam():void{
@@ -105,4 +113,19 @@ export class AdminComponent implements OnInit {
     else{this.dialog.closeAll();this.employeeInfoDialogOpen=false;}
   }
 
+  createDepartment(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data=this.AllUsers;
+    this.dialog.open(CreateDepartmentAdminComponent,dialogConfig);
+  }
+
+  openDepartmentDialog(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data;
+    this.dialog.open(DepartmentsComponent,dialogConfig);
+  }
 }

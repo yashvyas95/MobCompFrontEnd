@@ -12,7 +12,7 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
   styleUrls: ['./rescue-team-dialog.component.css']
 })
 export class RescueTeamDialogComponent implements OnInit {
-  displayedColumns: string[] = ['request_id', 'name', 'location', 'nature','status','action','message'];
+  displayedColumns: string[] = ['request_id', 'name', 'location' ,'resTeamObj','nature','status','action','message'];
   dataSource = new MatTableDataSource();
 
   constructor(private dialog : MatDialog,@Inject(MAT_DIALOG_DATA) public data: any,private requestService : RequestService) { }

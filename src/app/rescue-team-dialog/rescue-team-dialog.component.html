@@ -1,4 +1,4 @@
-<h4 mat-dialog-title class="RequestDialog">Reqeust Dialog</h4>
+<h4 mat-dialog-title class="RequestDialog">Request Dialog</h4>
 <button class="btnCreateSubreddit" (click)="close()">Close</button>
 <mat-dialog-content>
     <table mat-table [dataSource]="RequestData" >
@@ -21,6 +21,13 @@
           <td mat-cell style="text-align: center" *matCellDef="let element"> {{element.location}} </td>
         </ng-container>
       
+
+        <ng-container matColumnDef="resTeamObj">
+          <th mat-header-cell style="text-align: center" *matHeaderCellDef> resTeamObj </th>
+          <td mat-cell style="text-align: center" *matCellDef="let element"> {{element.resTeamObj}} </td>
+        </ng-container>
+
+
         <ng-container matColumnDef="nature">
           <th mat-header-cell style="text-align: center" *matHeaderCellDef> nature </th>
           <td mat-cell style="text-align: center" *matCellDef="let element"> {{element.nature}} </td>
