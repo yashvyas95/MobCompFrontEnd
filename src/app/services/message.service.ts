@@ -12,7 +12,14 @@ export class MessageService {
   getMessageByRequestId(requestId:number):Observable<any>{
     const params = new HttpParams().append('requestId',requestId.toString());
     console.log("GetMESSAGEBYUSERID"+params);
-     return this.httpClient.get('http://localhost:8080/api/request/getmessages/',{params:params});
+     return this.httpClient.get('http://localhost:8080/api/message/getmessages/',{params:params});
   }
+
+  getMessageByUserId(userId:number):Observable<any>{
+    const params = new HttpParams().append('userId',userId.toString());
+    console.log("GetMESSAGEBYUSERID"+params);
+     return this.httpClient.get('http://localhost:8080/api/message/getmessagesByUserId/',{params:params});
+  }
+
 
 }

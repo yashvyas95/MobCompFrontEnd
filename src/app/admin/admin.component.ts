@@ -13,6 +13,8 @@ import { CreateRescueTeamDialogComponent } from '../create-rescue-team-dialog/cr
 import { ChatLobbyComponent } from '../chat-lobby/chat-lobby.component';
 import { DepartmentsComponent } from '../departments/departments.component';
 import { CreateDepartmentAdminComponent} from '../create-department-admin/create-department-admin.component';
+import { Subscription } from 'rxjs';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -31,7 +33,7 @@ export class AdminComponent implements OnInit {
   rescueInfoDialogOpen=false;
   employeeInfoDialogOpen=false;
 
-  
+  private updateSubscription!: Subscription;
   constructor(private router : Router,private localStorage: LocalStorageService, private http: HttpClient,public dialog: MatDialog) { 
     console.log(this.localStorage.retrieve('username'));
   }
@@ -59,9 +61,14 @@ export class AdminComponent implements OnInit {
           (error)=>console.log(error)
         );
         
-        
+        this.updateSubscription = interval(1000).subscribe(
+          (val) => { 
+            this.getallData()
+        });
   }
-  
+  getallData(){
+   
+  }
   openRescueDialog(): void {
 
     const dialogConfig = new MatDialogConfig();

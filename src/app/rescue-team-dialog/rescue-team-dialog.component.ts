@@ -5,6 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {RequestService} from '../services/request.service';
 import {MessageToVictimComponent} from '../message-to-victim/message-to-victim.component';
 import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rescue-team-dialog',
@@ -16,7 +17,8 @@ export class RescueTeamDialogComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   constructor(private dialog : MatDialog,@Inject(MAT_DIALOG_DATA) public data: any,private requestService : RequestService) { }
-  RequestData:any
+  RequestData:any;
+  private updateSubscription!: Subscription;
   ngOnInit(): void {
     
     this.RequestData=this.data;
@@ -24,7 +26,10 @@ export class RescueTeamDialogComponent implements OnInit {
     console.log(this.data),
     console.log(this.RequestData),
     this.dataSource.data=this.RequestData;
-
+    this.updateSubscription = interval(1000).subscribe(
+      (val) => { 
+        this.RequestData=this.data;
+    });
   }
   completeRequest(request_id:any){
       let data ;

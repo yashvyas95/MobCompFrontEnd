@@ -12,6 +12,7 @@ import * as SockJS from 'sockjs-client';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { RescueTeamInfoDialogComponent } from '../rescue-team-info-dialog/rescue-team-info-dialog.component';
 import { ChatLobbyComponent } from '../chat-lobby/chat-lobby.component'; 
+import { AllMessagesDialogComponent } from '../all-messages-dialog/all-messages-dialog.component';
 
 @Component({
   selector: 'app-request-landing',
@@ -30,6 +31,8 @@ export class RequestLandingComponent implements OnInit {
   RequestObj:any;
   displayedColumns2=['requestId','members'];
   rescueTeamData:any;
+  allCOllection!:any[]
+
   ngOnInit(): void {
 
       console.log(this.localStorage.retrieve('request'));
@@ -72,9 +75,10 @@ export class RequestLandingComponent implements OnInit {
       });
        
       var dataReceived:string='';
-      this.ws.subscribe("/topic/chat", function(message: { body: string; }) {
+      this.ws.subscribe("/topic/chat", (message: { body: string; }) => {
        console.log(JSON.parse(message.body.toString()));
         dataReceived=JSON.stringify(message.body);
+        this.allCOllection.push(dataReceived);
         console.log("----------............asdasd."+dataReceived);
       });
       
@@ -92,6 +96,14 @@ export class RequestLandingComponent implements OnInit {
     this.dialog.open(ChatLobbyComponent,dialogConfig);
   }
 
-
+  openAllMessages(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = this.allMessages;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width="100%";
+    dialogConfig.position={top:"100px",left:""}
+    this.dialog.open(AllMessagesDialogComponent,dialogConfig);
+  }
 
 }

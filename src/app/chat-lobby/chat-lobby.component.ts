@@ -129,7 +129,7 @@ export class ChatLobbyComponent implements OnInit {
   disconnect(){
     this.webSocketService.closeWebSocket();
   }
-
+  sentMessages:any;
   sendMessage() {
     
     let timestamp =  new Date();
@@ -141,6 +141,7 @@ export class ChatLobbyComponent implements OnInit {
     let messageToSend = new ChatMessageDto(channel,Date(),this.request.requestId.toString(),messageContent,this.rescueTeam.rescueTeamId);
     console.log(messageToSend);
     this.ws.send(channel, {},JSON.stringify(messageToSend));
+    this.sendMessage.push()
     //this.ws.send("/app/chat", {},messageContent);
 }
 
