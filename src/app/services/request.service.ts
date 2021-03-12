@@ -11,7 +11,7 @@ export class RequestService {
 
   getRequest(id: number): Observable<any>{
     const params = new HttpParams().append('id',id.toString());
-    return this.httpClient.get('http://localhost:8080/api/request/getById/',{params:params});
+    return this.httpClient.get('http://localhost:8080/api/request/getById/',{params:params},{headers});
   }
 
   completeRequest(id:string): Observable<any>{
